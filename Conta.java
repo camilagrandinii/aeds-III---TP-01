@@ -66,5 +66,5 @@ public class Conta {
     transferenciasRealizadas = dis.readInt();
     saldoConta = dis.readFloat();
   }
-
+  
 }
