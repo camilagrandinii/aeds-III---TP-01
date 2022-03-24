@@ -78,7 +78,7 @@ public class Banco{
     }
 
     /*
-    Método que realiza transferencias entre os usuários, pegando como base o cpf de cada um
+    Método que realiza pega os dados para realizar a transferencia e chama outro metodo para realiza-la
     */
     public void Transferencia(){
     Scanner sc = new Scanner(System.in);
@@ -96,12 +96,16 @@ public class Banco{
         }
     sc.close();
     }
+
+    /*
+    Método que realiza transferencias entre os usuários, pegando como base o cpf de cada um
+    */
     public void realizaTransf(String cpf_debito, String cpf_credito, float valor) throws Exception{
             try{
             
                 byte[] ba;
                 int tam;
-                int ultimo_id = arq.readInt();
+                arq.seek(4);
 
                 while (arq.getFilePointer()<arq.length()){ 
                 Conta cRead = new Conta();
@@ -123,9 +127,7 @@ public class Banco{
                     }
                 }
 
-                arq.seek(0);
-                ultimo_id = arq.readInt();
-
+                arq.seek(4);
                 while (arq.getFilePointer()<arq.length()){ 
                     Conta cRead = new Conta();
     
@@ -160,7 +162,7 @@ public class Banco{
         try{
             byte[] ba;
             int tam;
-            int ultimo_id = arq.readInt();
+            arq.seek(4);
                 
             while (arq.getFilePointer()<arq.length()){ 
             Conta cRead = new Conta();
@@ -176,6 +178,10 @@ public class Banco{
             e.printStackTrace();
         }
     }
+
+    /*
+    Método que procura e "deleta" (marca a lápide como true) o registro que possua a ID provida
+    */
     public void deletaRegistro() throws Exception{
         System.out.println("Qual o registro desejado para deletar? ");
         int id = sc.nextInt();
@@ -183,7 +189,7 @@ public class Banco{
         try{
             byte[] ba;
             int tam;
-            int ultimo_id = arq.readInt();
+            arq.seek(4);
 
             while (arq.getFilePointer()<arq.length()){ 
             Conta cRead = new Conta();
@@ -206,6 +212,10 @@ public class Banco{
             e.printStackTrace();
         }
     }
+
+    /*
+    Método que procura e atualiza o registro que possua a ID provida
+    */
     public void atualizaRegistro() throws Exception{
         System.out.println("Qual registro voce deseja atualizar? ");
         int id = sc.nextInt();
