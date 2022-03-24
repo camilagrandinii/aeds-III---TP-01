@@ -20,12 +20,16 @@ public class Main {
     do{
         switch (op){
           case 1:
-          banco.criaConta(id);
+          try{ banco.criaConta(id);
           id++;
+          } catch(Exception e){e.printStackTrace();}
           break;
 
           case 2:
-          banco.Transferencia();
+          try{ banco.Transferencia();
+          }catch(Exception e){
+            e.printStackTrace();
+          }
           break;
 
           case 3:
