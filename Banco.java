@@ -11,16 +11,29 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Banco{
-    
+    RandomAccessFile arq;
+
+    /*
+    Método construtor da classe banco
+    */
+    Banco(){
+        try{ arq = new RandomAccessFile("dados/banco.db", "rw");
+        }catch(Exception e){}   
+    }
+
+    /*
+    Método que fecha o arquivo aberto pelo construtor
+    */
+    public void closeFile() throws Exception{
+        arq.close();
+    }
     /*
     Método que testa se o ID da conta criada é maior que o maior ID salvo
     SE SIM, salva o ID da conta criada no lugar do outro
     */
 
     public void testaID(int id){
-        RandomAccessFile arq;
         try{
-            arq = new RandomAccessFile("dados/livros.db", "rw");
             arq.seek(0); 
             int ultimo_id = arq.readInt();
             if (id>ultimo_id)
@@ -34,7 +47,6 @@ public class Banco{
     */
     public void criaConta(int id){
         Scanner sc = new Scanner(System.in);
-        RandomAccessFile arq;
         byte[] ba;
 
         System.out.println("Escreva o seu nome: ");
@@ -48,7 +60,6 @@ public class Banco{
         
         
         try{ba = conta.toByteArray();
-        arq = new RandomAccessFile("dados/livros.db", "rw");
 
         if (id==0){
         arq.writeInt(id);
@@ -89,10 +100,8 @@ public class Banco{
     sc.close();
     }
     public void realizaTransf(String cpf_debito, String cpf_credito, float valor) throws Exception{
-        RandomAccessFile arq; //ja traz os métodos do dataOutputStream ou inputStream
         Conta conta = new Conta();
             try{
-                arq = new RandomAccessFile("dados/conta.db", "rw");
             
                 byte[] ba;
                 int tam;
@@ -152,11 +161,8 @@ public class Banco{
         Scanner sc = new Scanner(System.in);
         System.out.println("Qual o registro desejado para leitura? ");
         int id = sc.nextInt();
-    
-        RandomAccessFile arq; //ja traz os métodos do dataOutputStream ou inputStream
+
         try{
-            arq = new RandomAccessFile("dados/conta.db", "rw");
-        
             byte[] ba;
             int tam;
             int ultimo_id = arq.readInt();
@@ -181,10 +187,7 @@ public class Banco{
         System.out.println("Qual o registro desejado para leitura? ");
         int id = sc.nextInt();
     
-        RandomAccessFile arq; //ja traz os métodos do dataOutputStream ou inputStream
         try{
-            arq = new RandomAccessFile("dados/conta.db", "rw");
-        
             byte[] ba;
             int tam;
             int ultimo_id = arq.readInt();
