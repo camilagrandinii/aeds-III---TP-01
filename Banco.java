@@ -206,4 +206,44 @@ public class Banco{
             e.printStackTrace();
         }
     }
+    public void atualizaRegistro() throws Exception{
+        System.out.println("Qual registro voce deseja atualizar? ");
+        int id = sc.nextInt();
+    
+        try{
+            byte[] ba;
+                int tam;
+                arq.seek(4);
+
+                while (arq.getFilePointer()<arq.length()){ 
+                Conta cRead = new Conta();
+
+                tam = arq.readInt();
+                ba = new byte[tam];
+                arq.read(ba);
+                cRead.fromByteArray(ba);
+                
+                    if (id==cRead.idConta){
+                    long pos1 = arq.getFilePointer();
+
+                    System.out.println("Escreva o seu nome: ");
+                    String nome = sc.nextLine();
+                    cRead.nomePessoa=nome;
+                    System.out.println("Escreva o seu cpf (sem tracos e/ou pontos): ");
+                    String cpf = sc.next();
+                    cRead.cpf=cpf;
+                    System.out.println("Escreva a sua cidade: ");
+                    String cidade = sc.nextLine();
+                    cRead.cidade=cidade;
+
+                    ba = cRead.toByteArray();
+                    arq.seek(pos1);
+                    arq.writeInt(ba.length);
+                    arq.write(ba);
+                    }
+                }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }

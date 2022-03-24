@@ -36,6 +36,10 @@ public class Main {
           break;
 
           case 4:
+          try{ banco.atualizaRegistro();
+          }catch(Exception e){
+            e.printStackTrace();
+          }
           break;
 
           case 5:
