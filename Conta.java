@@ -8,7 +8,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.text.DecimalFormat;
 
 public class Conta {
   protected int idConta;
@@ -33,7 +32,7 @@ public class Conta {
   }
 
       /*
-    Método construtor II da classe banco
+    Método construtor II da classe conta
     */
   public Conta() {
     this.idConta = -1;
