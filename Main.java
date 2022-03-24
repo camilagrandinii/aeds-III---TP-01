@@ -15,9 +15,10 @@ public class Main {
     Banco banco = new Banco(); //criando instância da classe banco para realizar as ações sobre ele
     printMenu();
 
-    int op=sc.nextInt();
+    int op=0;
     int id=0;
-    do{
+    while(op!=6){
+      op=sc.nextInt();
         switch (op){
           case 1:
           try{ banco.criaConta(id);
@@ -54,15 +55,14 @@ public class Main {
           break;
 
           case 6:
+          System.out.println("Saindo do programa...");
           try{
             banco.closeFile();
           }catch (Exception e){}
-          System.out.println("Saindo do programa...");
           break;
         }
-        printMenu();
-        op=sc.nextInt();
-    }while(op!=6);
+        if (op!=6) printMenu();
+    }
         sc.close();
   }
 }

@@ -26,11 +26,11 @@ public class Banco{
     public void closeFile() throws Exception{
         arq.close();
     }
+
     /*
     Método que testa se o ID da conta criada é maior que o maior ID salvo
     SE SIM, salva o ID da conta criada no lugar do outro
     */
-
     public void testaID(int id){
         try{
             arq.seek(0); 
@@ -50,15 +50,15 @@ public class Banco{
         System.out.println("Escreva o seu nome: ");
         String nome = sc.nextLine();
         System.out.println("Escreva o seu cpf (sem tracos e/ou pontos): ");
-        String cpf = sc.next();
+        String cpf = sc.nextLine();
         System.out.println("Escreva a sua cidade: ");
         String cidade = sc.nextLine();
 
         Conta conta = new Conta(id, nome, cpf, cidade);
         
-        
-        try{ba = conta.toByteArray();
-
+        try{
+            ba = conta.toByteArray();
+            arq.seek(0);
         if (id==0){
         arq.writeInt(id);
         }
@@ -152,6 +152,7 @@ public class Banco{
                 e.printStackTrace();
             }
         }
+        
     /*
     Método que procura e le o registro que corresponda a ID provida e printa na tela
     */
@@ -183,7 +184,7 @@ public class Banco{
     Método que procura e "deleta" (marca a lápide como true) o registro que possua a ID provida
     */
     public void deletaRegistro() throws Exception{
-        System.out.println("Qual o registro desejado para deletar? ");
+        System.out.println("Qual registro voce deseja deletar? ");
         int id = sc.nextInt();
     
         try{
