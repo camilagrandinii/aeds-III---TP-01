@@ -4,11 +4,7 @@
  * 2022 - 3o. Semestre
  */
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.Scanner;
-import java.util.ArrayList;
-
 public class Main {
   
   public static void printMenu(){
@@ -46,6 +42,9 @@ public class Main {
           break;
 
           case 6:
+          try{
+            banco.closeFile();
+          }catch (Exception e){}
           System.out.println("Saindo do programa...");
           break;
         }
