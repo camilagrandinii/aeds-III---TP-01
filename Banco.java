@@ -3,11 +3,8 @@
  * @author - Camila Lacerda Grandini & Joana Woldaysnky
  * 2022 - 3o. Semestre
  */
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Banco{
@@ -100,7 +97,6 @@ public class Banco{
     sc.close();
     }
     public void realizaTransf(String cpf_debito, String cpf_credito, float valor) throws Exception{
-        Conta conta = new Conta();
             try{
             
                 byte[] ba;
@@ -199,18 +195,19 @@ public class Banco{
             ba = new byte[tam];
             arq.read(ba);
             cRead.fromByteArray(ba);
-            cRead.lapide=true;
-
-            ba = cRead.toByteArray();
-                arq.seek(pos1);
-                arq.writeInt(ba.length);
-                arq.write(ba);
             
+                if (id==cRead.idConta){
+                cRead.lapide=true;
+
+                ba = cRead.toByteArray();
+                    arq.seek(pos1);
+                    arq.writeInt(ba.length);
+                    arq.write(ba);
+                }
             }
         }catch(Exception e){
             e.printStackTrace();
         }
         sc.close();
     }
-    
 }
