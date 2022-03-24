@@ -78,7 +78,7 @@ public class Banco{
     }
 
     /*
-    Método que realiza pega os dados para realizar a transferencia e chama outro metodo para realiza-la
+    Método que pega os dados para realizar a transferencia e chama outro metodo para realiza-la
     */
     public void Transferencia(){
     Scanner sc = new Scanner(System.in);
@@ -98,7 +98,8 @@ public class Banco{
     }
 
     /*
-    Método que realiza transferencias entre os usuários, pegando como base o cpf de cada um
+    Método que realiza transferencias entre os usuários, pegando como base o cpf de cada um e o valor informado pela
+    função Transferencia()
     */
     public void realizaTransf(String cpf_debito, String cpf_credito, float valor) throws Exception{
             try{
