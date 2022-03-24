@@ -19,6 +19,9 @@ public class Conta {
   protected float saldoConta;
   protected boolean lapide;
 
+      /*
+    Método construtor da classe conta
+    */
   public Conta(int id, String nome, String cpf, String cidade) {
     this.idConta = id;
     this.nomePessoa = nome;
@@ -29,6 +32,9 @@ public class Conta {
     this.lapide = false;
   }
 
+      /*
+    Método construtor II da classe banco
+    */
   public Conta() {
     this.idConta = -1;
     this.nomePessoa = "";
@@ -43,6 +49,9 @@ public class Conta {
     return "\nID....: " + this.idConta + "\nNome Pessoa.: " + this.nomePessoa + "\nCPF.: " + this.cpf + "\nCidade.: " + this.cidade + "\nTransferências Realizadas.: " + this.transferenciasRealizadas + "\nSaldo.: " + this.saldoConta;
   }
 
+    /*
+    Método para transformar os dados de uma instância da classe conta em um array de bytes
+    */
   public byte[] toByteArray() throws IOException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     DataOutputStream dos = new DataOutputStream(baos);
@@ -56,6 +65,9 @@ public class Conta {
     return baos.toByteArray();
   }
 
+    /*
+    Método para transformar o array de bytes em uma classe com seus atributos que descrevam os dados de uma instância da classe conta
+    */
   public void fromByteArray(byte[] ba) throws IOException {
     ByteArrayInputStream bais = new ByteArrayInputStream(ba);
     DataInputStream dis = new DataInputStream(bais);
