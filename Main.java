@@ -39,6 +39,10 @@ public class Main {
           break;
 
           case 5:
+          try{ banco.deletaRegistro();
+          }catch(Exception e){
+            e.printStackTrace();
+          }
           break;
 
           case 6:
@@ -49,7 +53,8 @@ public class Main {
           break;
         }
         printMenu();
-        op=sc.nextInt(); 
+        op=sc.nextInt();
+        System.out.println("valor salvo em op: "+op); 
     }while(op==0);
         sc.close();
   }

@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class Banco{
     RandomAccessFile arq;
+    Scanner sc;
 
     /*
     Método construtor da classe banco
@@ -16,6 +17,7 @@ public class Banco{
     Banco(){
         try{ arq = new RandomAccessFile("dados/banco.db", "rw");
         }catch(Exception e){}   
+        sc = new Scanner(System.in);
     }
 
     /*
@@ -43,15 +45,14 @@ public class Banco{
     em uma registro contendo: lápide, id, nome, cpf, cidade, transf realizadas e saldo
     */
     public void criaConta(int id){
-        Scanner sc = new Scanner(System.in);
         byte[] ba;
 
         System.out.println("Escreva o seu nome: ");
-        String nome = sc.next();
+        String nome = sc.nextLine();
         System.out.println("Escreva o seu cpf (sem tracos e/ou pontos): ");
         String cpf = sc.next();
         System.out.println("Escreva a sua cidade: ");
-        String cidade = sc.next();
+        String cidade = sc.nextLine();
 
         Conta conta = new Conta(id, nome, cpf, cidade);
         
@@ -74,7 +75,6 @@ public class Banco{
         }catch(Exception e){
             e.printStackTrace();
         }
-        sc.close();
     }
 
     /*
@@ -154,7 +154,6 @@ public class Banco{
     Método que procura e le o registro que corresponda a ID provida e printa na tela
     */
     public void leRegistro() throws Exception{
-        Scanner sc = new Scanner(System.in);
         System.out.println("Qual o registro desejado para leitura? ");
         int id = sc.nextInt();
 
@@ -176,11 +175,9 @@ public class Banco{
         }catch(Exception e){
             e.printStackTrace();
         }
-        sc.close();
     }
     public void deletaRegistro() throws Exception{
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Qual o registro desejado para leitura? ");
+        System.out.println("Qual o registro desejado para deletar? ");
         int id = sc.nextInt();
     
         try{
@@ -208,6 +205,5 @@ public class Banco{
         }catch(Exception e){
             e.printStackTrace();
         }
-        sc.close();
     }
 }
