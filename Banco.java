@@ -81,7 +81,6 @@ public class Banco{
     Método que pega os dados para realizar a transferencia e chama outro metodo para realiza-la
     */
     public void Transferencia(){
-    Scanner sc = new Scanner(System.in);
         System.out.println("Qual será a conta debitada? (cpf sem traços e/ou pontos) ");
         String cpf_debito = sc.next();
         System.out.println("Qual será a conta creditada? (cpf sem traços e/ou pontos) ");
@@ -94,7 +93,6 @@ public class Banco{
         }catch(Exception e){
             e.printStackTrace();
         }
-    sc.close();
     }
 
     /*
