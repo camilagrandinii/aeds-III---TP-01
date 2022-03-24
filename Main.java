@@ -62,8 +62,7 @@ public class Main {
         }
         printMenu();
         op=sc.nextInt();
-        System.out.println("valor salvo em op: "+op); 
-    }while(op==0);
+    }while(op!=6);
         sc.close();
   }
 }
