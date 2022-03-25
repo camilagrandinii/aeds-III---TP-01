@@ -18,7 +18,7 @@ public class Banco{
     */
     Banco(){
         try{ arq = new RandomAccessFile("dados/banco.db", "rw");
-        }catch(Exception e){}   
+        }catch(FileNotFoundException e){ System.out.println("Erro: Arquivo nao encontrado!");}   
         sc = new Scanner(System.in);
     }
 
