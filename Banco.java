@@ -262,7 +262,7 @@ public class Banco{
     */
     public void atualizaRegistro() throws Exception{
         System.out.println("Qual registro voce deseja atualizar? ");
-        int id = sc.nextInt();
+        int id = lerInteiro();
         boolean teste=false;
     
         try{
@@ -329,5 +329,16 @@ public class Banco{
         } catch(IOException e){
             System.out.println("Erro: Nao foi possível ler o arquivo!");
         }
+    }
+    /*
+    Função que transforma o inteiro lido com nextLine em inteiro 
+    para evitar o erro do comando nextLine ler o enter do nextInt 
+    */
+    public int lerInteiro() {
+        String digitado = "";
+    
+        digitado = sc.nextLine();
+    
+        return Integer.parseInt(digitado);
     }
 }
