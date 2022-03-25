@@ -70,6 +70,7 @@ public class Conta {
   public void fromByteArray(byte[] ba) throws IOException {
     ByteArrayInputStream bais = new ByteArrayInputStream(ba);
     DataInputStream dis = new DataInputStream(bais);
+    lapide = dis.readBoolean();
     idConta = dis.readInt();
     nomePessoa = dis.readUTF();
     cpf = dis.readUTF();

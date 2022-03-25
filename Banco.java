@@ -62,22 +62,22 @@ public class Banco{
         teste=false;
         
         while(teste==false){
-        System.out.println("Escreva o seu cpf (sem tracos e/ou pontos): ");
-        cpf = sc.nextLine();
-        if(cpf.length()==11)
-        teste=true;
-        else System.out.println("Digite um CPF valido!");
+            System.out.println("Escreva o seu cpf (sem tracos e/ou pontos): ");
+            cpf = sc.nextLine();
+            if(cpf.length()==11)
+            teste=true;
+            else System.out.println("Digite um CPF valido!");
         }
 
         teste=false;
 
         while(teste==false){
-        System.out.println("Escreva a sua cidade: ");
-        cidade = sc.nextLine();
+            System.out.println("Escreva a sua cidade: ");
+            cidade = sc.nextLine();
 
-        if (cidade.length()<40)
-        teste=true;
-        else System.out.println("Nome da cidade invalido!");
+            if (cidade.length()<40)
+            teste=true;
+            else System.out.println("Nome da cidade invalido!");
         }
 
         Conta conta = new Conta(id, nome, cpf, cidade);
@@ -85,18 +85,18 @@ public class Banco{
         try{
             ba = conta.toByteArray();
             arq.seek(0);
-        if (id==0){
-        arq.writeInt(id);
-        }
-        else{
-            try{ testaID(id); 
-            }catch (IOException e){System.out.println("Erro: Nao foi possível ler o arquivo!");}
-        }
+            if (id==0){
+            arq.writeInt(id);
+            }
+            else{
+                try{ testaID(id); 
+                }catch (IOException e){System.out.println("Erro: Nao foi possível ler o arquivo!");}
+            }
 
-        long pos = arq.length();
-        arq.seek(pos);
-        arq.writeInt(ba.length);
-        arq.write(ba);
+            long pos = arq.length();
+            arq.seek(pos);
+            arq.writeInt(ba.length);
+            arq.write(ba);
 
         } catch(IOException e){
             System.out.println("Erro: Nao foi possível ler o arquivo!");
@@ -202,15 +202,18 @@ public class Banco{
             arq.seek(4);
                 
             while (arq.getFilePointer()<arq.length()){ 
-            Conta cRead = new Conta();
-            tam = arq.readInt();
-            ba = new byte[tam];
-            arq.read(ba);
-            cRead.fromByteArray(ba);
-            
-            if (id==cRead.idConta)
-            cRead.toString();
+                Conta cRead = new Conta();
+                tam = arq.readInt();
+                ba = new byte[tam];
+                arq.read(ba);
+                cRead.fromByteArray(ba);
+                
+                if (id==cRead.idConta)
+                cRead.toString();
+                else
+                System.out.println("Erro: ID nao encontrado!");
             }
+            
         } catch(IOException e){
             System.out.println("Erro: Nao foi possível ler o arquivo!");
         }
