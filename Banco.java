@@ -37,8 +37,10 @@ public class Banco{
         try{
             arq.seek(0); 
             int ultimo_id = arq.readInt();
-            if (id>ultimo_id)
-            arq.writeInt(id);
+            if (id>ultimo_id){
+            arq.seek(0);
+                arq.writeInt(id);
+            }
         }catch(IOException e){System.out.println("Erro: Nao foi possível ler o arquivo!");}
     }
 
@@ -152,8 +154,8 @@ public class Banco{
                 ba = new byte[tam];
                 arq.read(ba);
                 cRead.fromByteArray(ba);
-                
-                    if (cpf_debito==cRead.cpf){
+                System.out.println("cpf lido: "+cRead.cpf);
+                    if (cpf_debito.equals(cRead.cpf)){
                     cRead.saldoConta-=valor;
                     cRead.transferenciasRealizadas++;
 
@@ -174,7 +176,7 @@ public class Banco{
                     arq.read(ba);
                     cRead.fromByteArray(ba);
                     
-                        if (cpf_credito==cRead.cpf){
+                        if (cpf_credito.equals(cRead.cpf)){
                         cRead.saldoConta+=valor;
                         cRead.transferenciasRealizadas++;
     
@@ -313,7 +315,6 @@ public class Banco{
                         }
 
                         ba = cRead.toByteArray();
-                        System.out.println("tam: "+tam+"ba length: "+ba.length);
                         if(tam==ba.length){
                         arq.seek(pos1);
                         arq.writeInt(ba.length);
