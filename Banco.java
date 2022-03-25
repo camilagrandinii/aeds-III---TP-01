@@ -6,6 +6,8 @@
 
 import java.io.RandomAccessFile;
 import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Banco{
     RandomAccessFile arq;
@@ -31,20 +33,20 @@ public class Banco{
     Método que testa se o ID da conta criada é maior que o maior ID salvo
     SE SIM, salva o ID da conta criada no lugar do outro
     */
-    public void testaID(int id){
+    public void testaID(int id) throws Exception{
         try{
             arq.seek(0); 
             int ultimo_id = arq.readInt();
             if (id>ultimo_id)
             arq.writeInt(id);
-        }catch(Exception e){e.printStackTrace();}
+        }catch(IOException e){System.out.println("Erro: Nao foi possível ler o arquivo!");}
     }
 
     /*
     Método que cria a conta do usuario e salva ela no arquivo de dados
     em uma registro contendo: lápide, id, nome, cpf, cidade, transf realizadas e saldo
     */
-    public void criaConta(int id){
+    public void criaConta(int id) throws Exception{
         byte[] ba;
         boolean teste = false;
         String nome="", cpf="", cidade="";
@@ -87,7 +89,8 @@ public class Banco{
         arq.writeInt(id);
         }
         else{
-        testaID(id);
+            try{ testaID(id); 
+            }catch (IOException e){System.out.println("Erro: Nao foi possível ler o arquivo!");}
         }
 
         long pos = arq.length();
@@ -95,15 +98,15 @@ public class Banco{
         arq.writeInt(ba.length);
         arq.write(ba);
 
-        }catch(Exception e){
-            e.printStackTrace();
+        } catch(IOException e){
+            System.out.println("Erro: Nao foi possível ler o arquivo!");
         }
     }
 
     /*
     Método que pega os dados para realizar a transferencia e chama outro metodo para realiza-la
     */
-    public void Transferencia(){
+    public void Transferencia() throws Exception{
         String cpf_debito="", cpf_credito="";
         boolean teste=false;
         while(teste==false){
@@ -125,8 +128,8 @@ public class Banco{
 
         try{ realizaTransf(cpf_debito, cpf_credito, valor_transf);
 
-        }catch(Exception e){
-            e.printStackTrace();
+        } catch(IOException e){
+            System.out.println("Erro: Nao foi possível ler o arquivo!");
         }
     }
 
@@ -135,10 +138,9 @@ public class Banco{
     função Transferencia()
     */
     public void realizaTransf(String cpf_debito, String cpf_credito, float valor) throws Exception{
+        byte[] ba;
+        int tam;    
             try{
-            
-                byte[] ba;
-                int tam;
                 arq.seek(4);
 
                 while (arq.getFilePointer()<arq.length()){ 
@@ -182,8 +184,8 @@ public class Banco{
                         }
                 }
                 
-            }catch(Exception e){
-                e.printStackTrace();
+            } catch(IOException e){
+                System.out.println("Erro: Nao foi possível ler o arquivo!");
             }
         }
         
@@ -209,8 +211,8 @@ public class Banco{
             if (id==cRead.idConta)
             cRead.toString();
             }
-        }catch(Exception e){
-            e.printStackTrace();
+        } catch(IOException e){
+            System.out.println("Erro: Nao foi possível ler o arquivo!");
         }
     }
 
@@ -243,8 +245,8 @@ public class Banco{
                     arq.write(ba);
                 }
             }
-        }catch(Exception e){
-            e.printStackTrace();
+        } catch(IOException e){
+            System.out.println("Erro: Nao foi possível ler o arquivo!");
         }
     }
 
@@ -317,8 +319,8 @@ public class Banco{
                         }
                     }
                 }
-        }catch(Exception e){
-            e.printStackTrace();
+        } catch(IOException e){
+            System.out.println("Erro: Nao foi possível ler o arquivo!");
         }
     }
 }
