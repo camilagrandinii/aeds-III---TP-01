@@ -92,7 +92,6 @@ public class Banco{
 
         long pos = arq.length();
         arq.seek(pos);
-
         arq.writeInt(ba.length);
         arq.write(ba);
 
@@ -105,10 +104,22 @@ public class Banco{
     Método que pega os dados para realizar a transferencia e chama outro metodo para realiza-la
     */
     public void Transferencia(){
-        System.out.println("Qual será a conta debitada? (cpf sem traços e/ou pontos) ");
-        String cpf_debito = sc.next();
-        System.out.println("Qual será a conta creditada? (cpf sem traços e/ou pontos) ");
-        String cpf_credito = sc.next();
+        String cpf_debito="", cpf_credito="";
+        boolean teste=false;
+        while(teste==false){
+            System.out.println("Qual será a conta debitada? (cpf sem traços e/ou pontos) ");
+            cpf_debito = sc.next();
+            if(cpf_debito.length()==11)
+            teste=true;
+            else System.out.println("Digite um CPF valido!");
+        }
+        while(teste==false){
+            System.out.println("Qual será a conta creditada? (cpf sem traços e/ou pontos) ");
+            cpf_credito = sc.next();
+            if(cpf_credito.length()==11)
+            teste=true;
+            else System.out.println("Digite um CPF valido!");
+        }
         System.out.println("Escreva o valor da transferencia: ");
         float valor_transf = sc.nextFloat();
 
