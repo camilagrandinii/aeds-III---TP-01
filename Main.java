@@ -22,8 +22,8 @@ public class Main {
         switch (op){
           case 1:
           try{ banco.criaConta(id);
-          id++;
           } catch(Exception e){e.printStackTrace();}
+          id++;
           break;
 
           case 2:

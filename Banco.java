@@ -195,12 +195,12 @@ public class Banco{
     public void leRegistro() throws Exception{
         System.out.println("Qual o registro desejado para leitura? ");
         int id = sc.nextInt();
+        byte[] ba;
+        int tam;
 
         try{
-            byte[] ba;
-            int tam;
+
             arq.seek(4);
-                
             while (arq.getFilePointer()<arq.length()){ 
                 Conta cRead = new Conta();
                 tam = arq.readInt();
@@ -208,8 +208,10 @@ public class Banco{
                 arq.read(ba);
                 cRead.fromByteArray(ba);
                 
-                if (id==cRead.idConta)
-                cRead.toString();
+                if (id==cRead.idConta){
+                    System.out.println("entrou aqui 3!!!");
+                    cRead.toString();
+                }
                 else
                 System.out.println("Erro: ID nao encontrado!");
             }
@@ -246,6 +248,9 @@ public class Banco{
                     arq.seek(pos1);
                     arq.writeInt(ba.length);
                     arq.write(ba);
+                }
+                else{
+                    System.out.println("Erro: ID nao encontrado!");
                 }
             }
         } catch(IOException e){
