@@ -142,7 +142,7 @@ public class Banco{
         byte[] ba;
         int tam;    
             try{
-                arq.seek(4);
+                arq.seek(4); //pula o maior ID que esta gravado no arquivo
 
                 while (arq.getFilePointer()<arq.length()){ 
                 Conta cRead = new Conta();
@@ -164,7 +164,7 @@ public class Banco{
                     }
                 }
 
-                arq.seek(4);
+                arq.seek(4); //pula o maior ID que esta gravado no arquivo
                 while (arq.getFilePointer()<arq.length()){ 
                     Conta cRead = new Conta();
     
@@ -201,7 +201,7 @@ public class Banco{
 
         try{
 
-            arq.seek(4);
+            arq.seek(4); //pula o maior ID que esta gravado no arquivo
             while (arq.getFilePointer()<arq.length()){ 
                 Conta cRead = new Conta();
                 tam = arq.readInt();
@@ -231,7 +231,7 @@ public class Banco{
         try{
             byte[] ba;
             int tam;
-            arq.seek(4);
+            arq.seek(4); //pula o maior ID que esta gravado no arquivo
 
             while (arq.getFilePointer()<arq.length()){ 
             Conta cRead = new Conta();
@@ -269,7 +269,7 @@ public class Banco{
         try{
             byte[] ba;
                 int tam;
-                arq.seek(4);
+                arq.seek(4); //pula o maior ID que esta gravado no arquivo
 
                 while (arq.getFilePointer()<arq.length()){ 
                 Conta cRead = new Conta();
@@ -318,8 +318,10 @@ public class Banco{
                         arq.write(ba);
                         }
                         else{
-                        arq.seek(pos1+4);
+                        arq.seek(pos1+4); //pula o tamanho da instancia que esta gravada no arquivo
                         cRead.lapide=true;
+                        arq.writeBoolean(cRead.lapide);
+                        
                         ba = cRead.toByteArray();
                         arq.seek(arq.length());
                         arq.writeInt(ba.length);
