@@ -254,6 +254,7 @@ public class Banco{
     public void atualizaRegistro() throws Exception{
         System.out.println("Qual registro voce deseja atualizar? ");
         int id = sc.nextInt();
+        boolean teste=false;
     
         try{
             byte[] ba;
@@ -269,17 +270,36 @@ public class Banco{
                 cRead.fromByteArray(ba);
                 
                     if (id==cRead.idConta){
-                        long pos1 = arq.getFilePointer();
+                    long pos1 = arq.getFilePointer();
 
-                        System.out.println("Escreva o seu nome: ");
-                        String nome = sc.nextLine();
-                        cRead.nomePessoa=nome;
+                        while(teste==false){
+                            System.out.println("Escreva o seu nome: ");
+                            cRead.nomePessoa = sc.nextLine();
+                            if(cRead.nomePessoa.length()<100)
+                            teste=true;
+                            else System.out.println("Nome invalido, digite uma abreviacao por favor!");
+                        }
+
+                        teste=false;
+                        
+                        while(teste==false){
                         System.out.println("Escreva o seu cpf (sem tracos e/ou pontos): ");
-                        String cpf = sc.next();
-                        cRead.cpf=cpf;
+                        cRead.cpf = sc.nextLine();
+                        if(cRead.cpf.length()==11)
+                        teste=true;
+                        else System.out.println("Digite um CPF valido!");
+                        }
+
+                        teste=false;
+
+                        while(teste==false){
                         System.out.println("Escreva a sua cidade: ");
-                        String cidade = sc.nextLine();
-                        cRead.cidade=cidade;
+                        cRead.cidade = sc.nextLine();
+
+                        if (cRead.cidade.length()<40)
+                        teste=true;
+                        else System.out.println("Nome da cidade invalido!");
+                        }
 
                         ba = cRead.toByteArray();
                         if(tam==ba.length){
