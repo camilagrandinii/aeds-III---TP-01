@@ -209,8 +209,7 @@ public class Banco{
                 cRead.fromByteArray(ba);
                 
                 if (id==cRead.idConta){
-                    System.out.println("entrou aqui 3!!!");
-                    cRead.toString();
+                    System.out.println(cRead.toString()+"\n");
                 }
                 else
                 System.out.println("Erro: ID nao encontrado!");
@@ -293,22 +292,22 @@ public class Banco{
                         teste=false;
                         
                         while(teste==false){
-                        System.out.println("Escreva o seu cpf (sem tracos e/ou pontos): ");
-                        cRead.cpf = sc.nextLine();
-                        if(cRead.cpf.length()==11)
-                        teste=true;
-                        else System.out.println("Digite um CPF valido!");
+                            System.out.println("Escreva o seu cpf (sem tracos e/ou pontos): ");
+                            cRead.cpf = sc.nextLine();
+                            if(cRead.cpf.length()==11)
+                            teste=true;
+                            else System.out.println("Digite um CPF valido!");
                         }
 
                         teste=false;
 
                         while(teste==false){
-                        System.out.println("Escreva a sua cidade: ");
-                        cRead.cidade = sc.nextLine();
+                            System.out.println("Escreva a sua cidade: ");
+                            cRead.cidade = sc.nextLine();
 
-                        if (cRead.cidade.length()<40)
-                        teste=true;
-                        else System.out.println("Nome da cidade invalido!");
+                            if (cRead.cidade.length()<40)
+                            teste=true;
+                            else System.out.println("Nome da cidade invalido!");
                         }
 
                         ba = cRead.toByteArray();
