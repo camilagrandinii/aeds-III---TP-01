@@ -18,7 +18,7 @@ public class Main {
     int op=0;
     int id=0;
     while(op!=6){
-      op=sc.nextInt();
+      op=banco.lerInteiro();
         switch (op){
           case 1:
           try{ banco.criaConta(id);

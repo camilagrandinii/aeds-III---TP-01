@@ -116,6 +116,7 @@ public class Banco{
             teste=true;
             else System.out.println("Digite um CPF valido!");
         }
+        teste=false;
         while(teste==false){
             System.out.println("Qual será a conta creditada? (cpf sem traços e/ou pontos) ");
             cpf_credito = sc.next();
@@ -330,6 +331,7 @@ public class Banco{
             System.out.println("Erro: Nao foi possível ler o arquivo!");
         }
     }
+
     /*
     Função que transforma o inteiro lido com nextLine em inteiro 
     para evitar o erro do comando nextLine ler o enter do nextInt 
