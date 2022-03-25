@@ -46,13 +46,37 @@ public class Banco{
     */
     public void criaConta(int id){
         byte[] ba;
+        boolean teste = false;
+        String nome="", cpf="", cidade="";
 
-        System.out.println("Escreva o seu nome: ");
-        String nome = sc.nextLine();
+        while(teste==false){
+            System.out.println("Escreva o seu nome: ");
+            nome = sc.nextLine();
+            if(nome.length()<100)
+            teste=true;
+            else System.out.println("Nome invalido, digite uma abreviacao por favor!");
+        }
+
+        teste=false;
+        
+        while(teste==false){
         System.out.println("Escreva o seu cpf (sem tracos e/ou pontos): ");
-        String cpf = sc.nextLine();
+        cpf = sc.nextLine();
+        if(cpf.length()==11)
+        teste=true;
+        else System.out.println("Digite um CPF valido!");
+        }
+
+        teste=false;
+
+        while(teste==false){
         System.out.println("Escreva a sua cidade: ");
-        String cidade = sc.nextLine();
+        cidade = sc.nextLine();
+
+        if (cidade.length()<40)
+        teste=true;
+        else System.out.println("Nome da cidade invalido!");
+        }
 
         Conta conta = new Conta(id, nome, cpf, cidade);
         
