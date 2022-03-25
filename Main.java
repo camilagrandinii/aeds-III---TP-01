@@ -6,7 +6,6 @@
 
 import java.util.Scanner;
 public class Main {
-  
   public static void printMenu(){
     System.out.println("MENU: \n1 - Criar uma Conta Bancária \n2 - Realizar uma Transferência \n3 - Ler um Registro \n4 - Atualizar um Registro \n5 - Deletar um Registro\n6 - Sair ");
   }
@@ -18,7 +17,7 @@ public class Main {
     int op=0;
     int id=0;
     while(op!=6){
-      op=banco.lerInteiro();
+      op=sc.nextInt();
         switch (op){
           case 1:
           try{ banco.criaConta(id);

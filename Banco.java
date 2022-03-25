@@ -53,6 +53,7 @@ public class Banco{
 
         while(teste==false){
             System.out.println("Escreva o seu nome: ");
+            sc.nextLine();
             nome = sc.nextLine();
             if(nome.length()<100)
             teste=true;
@@ -93,8 +94,7 @@ public class Banco{
                 }catch (IOException e){System.out.println("Erro: Nao foi possível ler o arquivo!");}
             }
 
-            long pos = arq.length();
-            arq.seek(pos);
+            arq.seek(arq.length());
             arq.writeInt(ba.length);
             arq.write(ba);
 
