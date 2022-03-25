@@ -188,7 +188,7 @@ public class Banco{
             } catch(IOException e){
                 System.out.println("Erro: Nao foi possível ler o arquivo!");
             }
-        }
+    }
         
     /*
     Método que procura e le o registro que corresponda a ID provida e printa na tela
@@ -209,7 +209,7 @@ public class Banco{
                 arq.read(ba);
                 cRead.fromByteArray(ba);
                 
-                if (id==cRead.idConta){
+                if (cRead.lapide==false && id==cRead.idConta){
                     System.out.println(cRead.toString()+"\n");
                 }
                 else
@@ -263,7 +263,7 @@ public class Banco{
     */
     public void atualizaRegistro() throws Exception{
         System.out.println("Qual registro voce deseja atualizar? ");
-        int id = lerInteiro();
+        int id = sc.nextInt();
         boolean teste=false;
     
         try{
@@ -284,6 +284,7 @@ public class Banco{
 
                         while(teste==false){
                             System.out.println("Escreva o seu nome: ");
+                            sc.nextLine();
                             cRead.nomePessoa = sc.nextLine();
                             if(cRead.nomePessoa.length()<100)
                             teste=true;
@@ -312,6 +313,7 @@ public class Banco{
                         }
 
                         ba = cRead.toByteArray();
+                        System.out.println("tam: "+tam+"ba length: "+ba.length);
                         if(tam==ba.length){
                         arq.seek(pos1);
                         arq.writeInt(ba.length);
@@ -319,30 +321,20 @@ public class Banco{
                         }
                         else{
                         arq.seek(pos1+4); //pula o tamanho da instancia que esta gravada no arquivo
-                        cRead.lapide=true;
-                        arq.writeBoolean(cRead.lapide);
-                        
+                        arq.writeBoolean(true);
+
                         ba = cRead.toByteArray();
                         arq.seek(arq.length());
                         arq.writeInt(ba.length);
                         arq.write(ba);
                         }
                     }
+                    else{
+                        System.out.println("Erro: O ID informado nao foi encontrado");
+                    }
                 }
         } catch(IOException e){
             System.out.println("Erro: Nao foi possível ler o arquivo!");
         }
-    }
-
-    /*
-    Função que transforma o inteiro lido com nextLine em inteiro 
-    para evitar o erro do comando nextLine ler o enter do nextInt 
-    */
-    public int lerInteiro() {
-        String digitado = "";
-    
-        digitado = sc.nextLine();
-    
-        return Integer.parseInt(digitado);
     }
 }
