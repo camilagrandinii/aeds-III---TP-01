@@ -49,7 +49,7 @@ public class Banco{
             arq.read(ba);
             cRead.fromByteArray(ba);
 
-                if (cpf.equals(cRead.cpf)){
+                if (cpf.equals(cRead.cpf) && cRead.lapide==false){
                 teste_cpf=true;
                 }
             }
@@ -222,7 +222,7 @@ public class Banco{
                     arq.writeInt(ba.length);
                     arq.write(ba);
                 }
-                if(end_credito==-1)
+                else
                 System.out.println("Erro: cpf informado para credito nao foi encontrado");
                 
             } catch(IOException e){
@@ -248,8 +248,6 @@ public class Banco{
                 ba = new byte[tam];
                 arq.read(ba);
                 cRead.fromByteArray(ba);
-                
-                System.out.println("cRead lapide = "+cRead.lapide+"id conta: "+cRead.idConta);
 
                 if (cRead.lapide==false && id==cRead.idConta){
                     System.out.println(cRead.toString()+"\n");
@@ -443,6 +441,7 @@ public class Banco{
         Conta cRead;
         byte[] ba;
         long pt;
+
         try{
             arqIndice.seek(0);
             while(arqIndice.getFilePointer()<arqIndice.length()){
@@ -462,23 +461,42 @@ public class Banco{
     Método que realiza uma pesquisa binaria nos dados do arquivo de indice
     Tomando como base para a pesquisa os dados salvos no vetor de contas
     */
-    public long pesquisa_binariaString(String pesquisa_string){
+    public long pesquisa_binariaString(String pesquisaString){
         int cont = numContas();
+        cont++; // devemos somar 1 pra criar o vetor com posições suficientes para caber todos os registros do arq indice
         Conta[] contas = new Conta[cont];
         contas = lerTodosDados();
-		// Returns index da pesquisa no array (se a pesquisa estiver presente nela)
+
         int beggining = 0, end = cont-1;
             while (beggining <= end) {
                 int middle = beggining + (end - beggining) / 2;
 
-                if (pesquisa_string.compareTo(contas[middle].cpf)==0) //achou 
-                    return contas[middle].end;
-                
-                if (pesquisa_string.compareTo(contas[middle].cpf)>0) // Se a string é maior, ignore left half
+                if (pesquisaString.compareTo(contas[middle].cpf)==0) //achou
+                    return contas[middle].end; // retorna endereço da pesquisa no arquivo de dados (se a pesquisa estiver presente nele)
+
+                else if (pesquisa_binariaID(pesquisaString)>contas[middle].idConta) // Se a string é maior, ignora a metade da esquerda
                     beggining = middle + 1;
 
-                else // Se a string é menor é menor, ignore right half
+                else // Se a string é menor é menor, ignora a metade da direita
                     end = middle - 1;
+            }
+        return -1; // else return -1 
+    }
+    /*
+    Método que realiza uma pesquisa binaria nos dados do arquivo de indice
+    Tomando como base para a pesquisa os dados salvos no vetor de contas
+    */
+    public int pesquisa_binariaID(String pesquisa_string){
+        int cont = numContas();
+        cont++; // devemos somar 1 pra criar o vetor com posições suficientes para caber todos os registros do arq indice
+        Conta[] contas = new Conta[cont];
+        contas = lerTodosDados();
+
+        int beggining = 0, end = cont-1;
+            while (beggining <= end) {
+                if (pesquisa_string.equals(contas[beggining].cpf)) //achou 
+                    return contas[beggining].idConta; // retorna endereço da pesquisa no arquivo de dados (se a pesquisa estiver presente nele)
+                beggining++;
             }
         return -1; // else return -1 
     }
