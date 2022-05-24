@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Banco{
-    RandomAccessFile arq, arqIndice;
+    RandomAccessFile arq, arqIndice, arqTemp1, arqTemp2, arqTemp3, arqTemp4;
     Scanner sc;
 
     /*
@@ -21,6 +21,14 @@ public class Banco{
         }catch(FileNotFoundException e){ System.out.println("Erro: Arquivo nao encontrado!");}   
         try{ arqIndice = new RandomAccessFile("dados/indicesDados.db", "rw");
         }catch(FileNotFoundException e){ System.out.println("Erro: Arquivo nao encontrado!");}   
+        try{ arqTemp1 = new RandomAccessFile("dados/arqTemp1.db", "rw");
+        }catch(FileNotFoundException e){ System.out.println("Erro: Arquivo nao encontrado!");}
+        try{ arqTemp2 = new RandomAccessFile("dados/arqTemp2.db", "rw");
+        }catch(FileNotFoundException e){ System.out.println("Erro: Arquivo nao encontrado!");}   
+        try{ arqTemp3 = new RandomAccessFile("dados/arqTemp3.db", "rw");
+        }catch(FileNotFoundException e){ System.out.println("Erro: Arquivo nao encontrado!");}
+        try{ arqTemp4 = new RandomAccessFile("dados/arqTemp4.db", "rw");
+        }catch(FileNotFoundException e){ System.out.println("Erro: Arquivo nao encontrado!");}
         sc = new Scanner(System.in);
     }
 
@@ -30,6 +38,10 @@ public class Banco{
     public void closeFile() throws Exception{
         arq.close();
         arqIndice.close();
+        arqTemp1.close();
+        arqTemp2.close();
+        arqTemp3.close();
+        arqTemp4.close();
     }
     /*
     Método que testa se o CPF da conta criada já existe
@@ -136,6 +148,8 @@ public class Banco{
 
             arq.writeInt(ba.length);
             arq.write(ba);
+
+            ordenacaoExterna();
 
             arqIndice.seek(arqIndice.length());
             arqIndice.write(baIndice); //escreve o array de bytes no arquivo de indice
@@ -298,6 +312,7 @@ public class Banco{
         } catch(IOException e){
             System.out.println("Erro: Nao foi possível ler o arquivo!");
         }
+        ordenacaoExterna();
     }
 
     /*
@@ -474,7 +489,7 @@ public class Banco{
                 if (pesquisaString.compareTo(contas[middle].cpf)==0) //achou
                     return contas[middle].end; // retorna endereço da pesquisa no arquivo de dados (se a pesquisa estiver presente nele)
 
-                else if (pesquisa_binariaID(pesquisaString)>contas[middle].idConta) // Se a string é maior, ignora a metade da esquerda
+                else if (pesquisa_sequencialID(pesquisaString)>contas[middle].idConta) // Se a string é maior, ignora a metade da esquerda
                     beggining = middle + 1;
 
                 else // Se a string é menor é menor, ignora a metade da direita
@@ -483,10 +498,11 @@ public class Banco{
         return -1; // else return -1 
     }
     /*
-    Método que realiza uma pesquisa binaria nos dados do arquivo de indice
+    Método que realiza uma pesquisa sequencial nos dados do arquivo de indice 
+    para encontrar o ID asssociado a um determinado CPF
     Tomando como base para a pesquisa os dados salvos no vetor de contas
     */
-    public int pesquisa_binariaID(String pesquisa_string){
+    public int pesquisa_sequencialID(String pesquisa_string){
         int cont = numContas();
         cont++; // devemos somar 1 pra criar o vetor com posições suficientes para caber todos os registros do arq indice
         Conta[] contas = new Conta[cont];
@@ -499,5 +515,248 @@ public class Banco{
                 beggining++;
             }
         return -1; // else return -1 
+    }
+    /*
+    Método que le 10 ou menos dados presentes no arquivo de indices 
+    e retorna um array com as contas lidas
+    */
+    public Conta[] le10Dados(){
+        int cont=0;
+        byte[] ba;
+        Conta[] cRead = new Conta[10];
+        try{
+            while (arqIndice.getFilePointer()<arqIndice.length() && cont<10){ 
+                cRead[cont] = new Conta();
+                ba = new byte[25];
+                arqIndice.read(ba);
+                cRead[cont].fromByteArrayIndice(ba);
+                cont++;
+
+                if(arqIndice.getFilePointer()==arqIndice.length())
+                cont=10;
+            }
+        }catch(Exception e){}
+        return cRead;
+    }
+    /*
+    Método que encontra o numero de passadas necessarias na intercalação balanceada
+    */
+    public double log(double base, double valor) {
+        return Math.ceil((Math.log(valor) / Math.log(base)));
+    }
+    /*
+    Método que realiza a etapa de distribuicao da intercalação balanceada 
+    e chama o metodo que realiza propriamente a intercalação balanceada
+    */
+    public void ordenacaoExterna(){
+        Conta[] cRead;
+        byte[] ba;
+        int numContas=numContas();
+        numContas++;
+        int numBlocos=(numContas/10);
+        int passadas=(int)(1+log(numBlocos,2));
+        long pt_t1[] = new long[numBlocos], pt_t2[] = new long[numBlocos]; //declarando ponteiros para marcar as posições nas quais ocorre a mudança de blocos
+
+        try{
+            arqIndice.seek(0);
+            arqTemp1.seek(0);
+            arqTemp2.seek(0);
+        }catch(Exception e){}
+        
+        for (int j=0; j<numBlocos; j++){
+            cRead = new Conta[10];
+            ba = new byte[25];
+
+            cRead = le10Dados(); //carrega 10 registros do arquivo de indice
+            cRead = sort(cRead); //ordena os 10 registros com base no id com o metodo quicksort
+
+            for(int i=0, pt1=0, pt2=0; i<cRead.length; i++){
+                try{
+                ba = cRead[i].toByteArray();
+                    if (j%2==0){
+                    arqTemp1.write(ba); //salva no arquivo temporario um dos registros ordenados
+                        if (i%9==0){
+                        pt_t1[pt1] = arqTemp1.getFilePointer(); //salva o endereco de onde acaba cada bloco de registros ordenados
+                        pt1++;
+                        }
+                    }
+                    else{
+                    arqTemp2.write(ba);
+                        if (i%9==0){
+                        pt_t1[pt2] = arqTemp2.getFilePointer(); //salva o ponteiro 
+                        pt2++;
+                        }
+                    }
+                }catch(Exception e){}
+            }
+        }
+        intercalacao(passadas, pt_t1, pt_t2, numBlocos);
+    }
+    /*
+    Método que realiza a etapa de intercalacao da intercalação balanceada
+    */
+    public void intercalacao(int passadas, long[] pt_t1, long[] pt_t2, int numBlocos){
+        Conta[] cRead;
+        byte[] ba_t1, ba_t2;
+        int i=0, copia_j=0, copia_a=0;
+        
+        for (int j=0; j<passadas; j++){ //o for externo controla em qual passada pelos arquivos está
+            try{
+                arqTemp1.seek(0);
+                arqTemp2.seek(0);
+                arqTemp3.seek(0);
+                arqTemp4.seek(0);
+            }catch(Exception e){}
+
+            for (int a=0; a<numBlocos/2; a++){ //controla quando mudaremos de blocos de análise para intercalar
+                cRead = new Conta[2];
+                ba_t1 = new byte[25];
+                ba_t2 = new byte[25];
+                i=0;
+
+                try{
+                    while((arqTemp1.getFilePointer()!=pt_t1[a] && arqTemp2.getFilePointer()!=pt_t2[a]) || (arqTemp1.getFilePointer()!=pt_t1[a] && arqTemp2.getFilePointer()==pt_t2[a]) || (arqTemp1.getFilePointer()==pt_t1[a] && arqTemp2.getFilePointer()!=pt_t2[a])){    
+                        if (i==0){ //testa se é a primeira conta que estamos lendo
+                            if(j%2==0){ //testa se estamos em uma passada par ou impar, se for par os arqTemp1 e 2 sao de leitura e o 3 e 4 de escrita
+                            //SENAO é o contrario
+                            arqTemp1.read(ba_t1);
+                            arqTemp2.read(ba_t2);
+                            }
+                            else{
+                            arqTemp3.read(ba_t1);
+                            arqTemp4.read(ba_t2);   
+                            }
+                        }
+                        cRead[i].fromByteArray(ba_t1);
+                        cRead[i+1].fromByteArray(ba_t2);
+
+                        if(j%2==0){
+                                if (a%2==0){ //testa em uma passada a blocos par, SE FOR vamos escrever no arquivo 3
+                                    //SENAO escrevemos no 4
+                                    if(cRead[i].idConta<cRead[i+1].idConta){
+                                    arqTemp3.write(ba_t1);
+                                    arqTemp1.read(ba_t1);
+                                    }
+                                    else{
+                                    arqTemp3.write(ba_t2);
+                                    arqTemp2.read(ba_t2);
+                                    }
+                                }
+                                else{
+                                    if(cRead[i].idConta<cRead[i+1].idConta){
+                                    arqTemp4.write(ba_t1);
+                                    arqTemp1.read(ba_t1);
+                                    }
+                                    else{
+                                    arqTemp4.write(ba_t2);
+                                    arqTemp2.read(ba_t2);
+                                    }
+                                } 
+                        }   
+                        else{
+                            if (a%2==0){
+                                if(cRead[i].idConta<cRead[i+1].idConta){
+                                arqTemp1.write(ba_t1);
+                                arqTemp3.read(ba_t1);
+                                }
+                                else{
+                                arqTemp1.write(ba_t2);
+                                arqTemp3.read(ba_t1);
+                                }
+                            }
+                            else{
+                                if(cRead[i].idConta<cRead[i+1].idConta){
+                                arqTemp2.write(ba_t1);
+                                arqTemp4.read(ba_t1);
+                                }
+                                else{
+                                arqTemp2.write(ba_t2);
+                                arqTemp4.read(ba_t2);
+                                }
+                            } 
+                        }
+                        i++;
+                    }
+                }catch(Exception e){}
+            copia_a=a; //copiamos o a para saber em qual arquivo nós terminamos escrevendo
+            }
+
+            numBlocos/=2; //atualizando o numero de blocos da intercalação
+            if(numBlocos<=1)
+                j=passadas;
+            copia_j=j; //copiamos o j para saber em qual arquivo nós terminamos escrevendo
+        }
+
+        ba_t1 = new byte[25];
+        try{
+            arqIndice.seek(0);
+            arqTemp1.seek(0);
+            arqTemp2.seek(0);
+            arqTemp3.seek(0);
+            arqTemp4.seek(0);
+
+        //metodos para passar os dados do arquivo temporario para o de indice
+            if (copia_a%2==0 && copia_j%2==0){
+                while(arqTemp3.getFilePointer()<arqTemp3.length()){
+                    arqTemp3.read(ba_t1);
+                    arqIndice.write(ba_t1);
+                }
+            }
+            else if (copia_a%2!=0 && copia_j%2==0){
+                while(arqTemp4.getFilePointer()<arqTemp4.length()){
+                    arqTemp4.read(ba_t1);
+                    arqIndice.write(ba_t1);
+                }
+            }
+            else if (copia_a%2==0 && copia_j%2!=0){
+                while(arqTemp1.getFilePointer()<arqTemp1.length()){
+                    arqTemp1.read(ba_t1);
+                    arqIndice.write(ba_t1);
+                }
+            }
+            else if (copia_a%2!=0 && copia_j%2!=0){
+                while(arqTemp2.getFilePointer()<arqTemp2.length()){
+                    arqTemp2.read(ba_t1);
+                    arqIndice.write(ba_t1);
+                }
+            }
+        }catch(Exception e){}
+    }
+    //Função que troca 2 posições do vetor de contas
+    public Conta[] swap (int i, int j, Conta[] array){
+        Conta tmp;
+        tmp=array[i];
+        array[i]=array[j];
+        array[j]=tmp;
+
+        return array;
+    }
+    //Função que ordena o vetor de contas por quicksort
+    public Conta[] quicksort(int esq, int dir, Conta[] array) {
+        int i = esq, j = dir;
+        int pivo = ((dir+esq)/2);
+        Conta contaPivo = (Conta) array[pivo];
+        while (i <= j) {
+            while (array[i].idConta<contaPivo.idConta) i++;
+            while (array[i].idConta>contaPivo.idConta) j--;
+            if (i <= j) {
+                array = swap(i,j, array);
+                i++;
+                j--;
+            }
+        }
+        if (esq < j)  quicksort(esq, j, array);
+        if (i < dir)  quicksort(i, dir, array);
+        return array;
+    }
+    /*
+    Função que chama a função do quicksort para ordenar o vetor de contas
+    */
+    public Conta[] sort(Conta[] contas){
+        int numContas = numContas();
+        numContas++;
+        contas = quicksort(0, numContas, contas);
+
+        return contas;
     }
 }
