@@ -127,6 +127,7 @@ public class Banco{
             else System.out.println("Nome da cidade invalido!");
         }
 
+        nome = criptografiaCesar(nome);
         Conta conta = new Conta(id, nome, cpf, cidade);
         
         try{
@@ -262,6 +263,7 @@ public class Banco{
                 ba = new byte[tam];
                 arq.read(ba);
                 cRead.fromByteArray(ba);
+                cRead.nomePessoa = descriptografiaCesar(cRead.nomePessoa);
 
                 if (cRead.lapide==false && id==cRead.idConta){
                     System.out.println(cRead.toString()+"\n");
@@ -496,6 +498,26 @@ public class Banco{
                     end = middle - 1;
             }
         return -1; // else return -1 
+    }
+    /*
+    Método que realiza a criptografia sobre o nome do cliente
+    */
+    public String criptografiaCesar(String str){
+        String str_cripto = "";
+        for (int i  = 0; i < str.length(); i++){
+            str_cripto += (char) (str.charAt(i) + 3);
+        }
+        return str_cripto;
+    }
+    /*
+    Método que realiza a descriptografia sobre o nome do cliente
+    */
+    public String descriptografiaCesar(String str){
+        String str_descripto = "";
+        for (int i  = 0; i < str.length(); i++){
+            str_descripto += (char) (str.charAt(i) - 3);
+        }
+        return str_descripto;
     }
     /*
     Método que realiza uma pesquisa sequencial nos dados do arquivo de indice 
